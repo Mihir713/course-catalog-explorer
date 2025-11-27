@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Course Explorer</h1>
+        <p>Upload a JSON file containing course data and explore!</p>
+    </header>
+
+    <section class="upload-section">
+        <input type="file" id="fileInput" accept=".json">
+        <button id="loadDataBtn">Load Data</button>
+    </section>
+
+    <section class="filters-section">
+        <h2>Filter Courses</h2>
+        <label for="levelFilter">Level:</label>
+        <select id="levelFilter">
+            <option value="">-- Select Level --</option>
+        </select>
+
+        <label for="creditsFilter">Credits:</label>
+        <select id="creditsFilter">
+            <option value="">-- Select Credits --</option>
+        </select>
+
+        <label for="instructorFilter">Instructor:</label>
+        <select id="instructorFilter">
+            <option value="">-- Select Instructor --</option>
+        </select>
+    </section>
+
+    <section class="sort-section">
+        <h2>Sort Courses</h2>
+        <label for="sortBy">Sort by:</label>
+        <select id="sortBy">
+            <option value="title">Title</option>
+            <option value="id">ID</option>
+            <option value="semester">Semester</option>
+        </select>
+    </section>
+
+    <section class="courses-section">
+        <h2>Course Listings</h2>
+        <ul id="courseList"></ul>
+    </section>
+
+    <section class="course-details">
+        <h2>Course Details</h2>
+        <div id="courseDetails">
+            <p>Select a course to see its details.</p>
+        </div>
+    </section>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
