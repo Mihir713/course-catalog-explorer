@@ -1,42 +1,46 @@
-# 📚 Course Catalog Explorer
+# Course Catalog Explorer
 
-> An interactive, data-driven course browser. Upload a JSON file of courses and instantly filter, sort, and inspect them — no backend, no frameworks, no bullshit.
+> Client-side course data browser with dynamic multi-attribute filtering, sorting, and detail inspection. Zero-dependency vanilla stack — ingest JSON, navigate instantly, no backend required.
 
-![Language](https://img.shields.io/badge/language-JavaScript-F7DF1E?style=flat-square)
-![UI](https://img.shields.io/badge/HTML-CSS-1572B6?style=flat-square)
-![Size](https://img.shields.io/badge/size-%3C5KB-00C853?style=flat-square)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=flat-square&logo=javascript)
+![HTML5](https://img.shields.io/badge/HTML-5-E34F26?style=flat-square&logo=html5)
+![CSS3](https://img.shields.io/badge/CSS-3-1572B6?style=flat-square&logo=css3)
+![Bundle](https://img.shields.io/badge/bundle-5KB-0ABF53?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-9742FF?style=flat-square)
 
 ---
 
-## ✨ Features
+## Overview
 
-- **Upload any JSON course dataset** — works with your data, no schema lock-in
-- **Filter by Level, Credits, or Instructor** — dynamic multi-select filtering
-- **Sort by Title, ID, or Semester** — reorder the list instantly
-- **Click any course** — see full details (description, instructor, credits, semester)
-- **Zero dependencies** — pure vanilla HTML, CSS, and JavaScript
-- **No backend required** — runs entirely in the browser, files never leave your machine
+A lightweight, single-page course browser that operates entirely on the client side. Upload a structured JSON dataset and immediately interact with it through cross-filtering (level, credits, instructor), sortable columns (title, ID, semester), and click-to-inspect detail panels. No data ever leaves the browser — the entire pipeline is local.
 
-## 🚀 Quick Start
+## Features
+
+- **JSON ingestion** — drag-and-drop file load via `FileReader` API with schema validation
+- **Multi-attribute filtering** — independent dropdown filters for level, credits, and instructor that compose additively
+- **Sortable list view** — reorder by title, course ID, or semester via single-select control
+- **Detail inspection** — click any course to expand full metadata (description, instructor, credits, level, semester)
+- **Reactive filter population** — filter dropdowns dynamically populate from the loaded dataset using `Set` deduplication
+- **Zero server dependency** — runs from the filesystem or any static host
+
+## Quick Start
 
 ```bash
-# Clone it
 git clone https://github.com/Mihir713/course-catalog-explorer.git
 cd course-catalog-explorer
-
-# Open directly (no server needed)
 open index.html
 ```
 
-Or serve with any static server:
+Or serve behind any static HTTP server:
+
 ```bash
 python3 -m http.server 8000
 # → http://localhost:8000
 ```
 
-## 🧪 Sample Data
+## Data Contract
 
-Create a JSON file like `courses.json` and upload it:
+Uploaded JSON must be an array of objects matching this schema:
 
 ```json
 [
@@ -48,60 +52,47 @@ Create a JSON file like `courses.json` and upload it:
     "credits": 4,
     "semester": "Fall 2025",
     "description": "Fundamentals of programming using Python."
-  },
-  {
-    "id": "CS201",
-    "title": "Data Structures",
-    "instructor": "Dr. Johnson",
-    "level": "Undergraduate",
-    "credits": 4,
-    "semester": "Winter 2026",
-    "description": "Arrays, linked lists, trees, and graphs."
   }
 ]
 ```
 
-### Expected JSON Schema
-
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string | Course code |
-| `title` | string | Course name |
-| `instructor` | string | Professor name |
-| `level` | string | e.g. Undergraduate, Graduate |
-| `credits` | number | Credit hours |
-| `semester` | string | Term offered |
-| `description` | string | Short course summary |
+| `id` | `string` | Course code |
+| `title` | `string` | Display name |
+| `instructor` | `string` | Instructor full name |
+| `level` | `string` | Academic level (Undergraduate, Graduate, etc.) |
+| `credits` | `number` | Credit hours |
+| `semester` | `string` | Term identifier |
+| `description` | `string` | Short description |
 
-## 📁 Project Structure
+## Architecture
 
 ```
-course-catalog-explorer/
-├── index.html      # Main HTML — layout + controls
-├── scripts.js      # All JS — upload, filter, sort, display
-└── styles.css      # Styling — clean, responsive
+index.html       → Layout shell, control bindings
+scripts.js       → Data pipeline (parse → filter → sort → render)
+styles.css       → Responsive layout, hover states, detail pane
 ```
 
-## 🖱️ How to Use
+The data pipeline is a pure function chain:
 
-1. Open `index.html` in your browser
-2. Click **"Choose File"** and select your JSON file
-3. Click **"Load Data"**
-4. Browse the course list — click any course for details
-5. Use the dropdowns to **filter** by level, credits, or instructor
-6. Use the **sort** dropdown to reorder the list
+```
+FileReader → JSON.parse → [filter] → [sort] → render()
+```
 
-## 🧠 Concepts Demonstrated
+Filters compose via `Array.filter()` with implicit AND logic across selected values. Sort uses `Array.sort()` with a configurable comparator selected by the dropdown value.
 
-| Concept | Implementation |
-|---------|---------------|
-| File I/O (browser) | `FileReader` + `JSON.parse` |
-| Dynamic filtering | `Array.filter()` with chained conditions |
-| Event-driven UI | `addEventListener` on file input + filter selects |
-| Set deduplication | `new Set(courses.map(c ⇒ c.level))` for filter options |
-| Template literals | `innerHTML = \`…\${course.title}…\`` for details pane |
-| Defensive parsing | `try/catch` around JSON parse with user feedback |
+## Tech Specs
 
-## 📄 License
+| Property | Value |
+|----------|-------|
+| Files | 3 (`.html` + `.js` + `.css`) |
+| Bundle size | ~5 KB total |
+| Dependencies | 0 |
+| Data flow | Unidirectional (parse → filter → render) |
+| State | Stateless (re-renders from filtered array on each interaction) |
+| Compat | All modern browsers (Chrome, Firefox, Safari, Edge) |
+
+## License
 
 MIT
